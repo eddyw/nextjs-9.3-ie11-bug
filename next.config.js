@@ -1,3 +1,11 @@
+const path = require('path')
+
+const POLYFILL_NOMODULE = path.resolve(
+  __dirname,
+  'polyfills',
+  'polyfill-nomodule.js'
+)
+
 module.exports = (_, config) => {
   config.webpack = (options) => {
     const originalEntry = options.entry
@@ -5,10 +13,8 @@ module.exports = (_, config) => {
       const entries = await originalEntry()
 
       if (entries['static/runtime/polyfills.js']) {
-        console.log(require.resolve('core-js/stable'))
         entries['static/runtime/polyfills.js'] = [
-          require.resolve('core-js/stable'),
-          entries['static/runtime/polyfills.js'],
+          POLYFILL_NOMODULE,
         ]
       }
       return entries;
